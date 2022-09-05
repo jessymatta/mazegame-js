@@ -1,10 +1,14 @@
 var score = 0;
 var touched_once_border = false;
-var touched_end_once=false;
-var no_hoverover_bound1=false;
+var touched_end_once = false;
+var no_hoverover_bound1 = false;
 
-//not working: "cheating"
-
+function textDesc() {
+    var p = document.createElement("p");
+    p.textContent =
+        "You can touch the top left part of the maze once , you lose when you touch the rest of it. Click on S to reset the Maze. Five points are added if you win and ten points are deducted when you lose.";
+    document.body.appendChild(p);
+}
 
 function boundColor(wanted_color) {
     var all_boundaries = document.getElementsByClassName("boundary");
@@ -36,13 +40,18 @@ function won() {
 
 function collisionCheck(val) {
     console.log("HERE  TOUCHED_ONCE IS SET TO TRUEEEEEEE " + touched_once_border);
-    if (val.id == "boundary1" && no_hoverover_bound1==false) {
+    if (val.id == "boundary1" && no_hoverover_bound1 == false) {
         var boundary_one = (document.getElementById(
             "boundary1"
         ).style.backgroundColor = "#bd0000");
     }
 
-    if (val.classList.value == "boundary" && val.id != "boundary1" && touched_once_border == false) {//not else if because we can touch the first boundary element and then touch the rest
+    if (
+        val.classList.value == "boundary" &&
+        val.id != "boundary1" &&
+        touched_once_border == false
+    ) {
+        //not else if because we can touch the first boundary element and then touch the rest
         boundColorMinusFirst("#bd0000");
         boundColor("#bd0000");
         lost();
@@ -50,24 +59,26 @@ function collisionCheck(val) {
         touched_once_border = true;
     }
 
-    if (val.id == "end" && touched_once_border == false && touched_end_once == false) {
+    if (
+        val.id == "end" &&
+        touched_once_border == false &&
+        touched_end_once == false
+    ) {
         won();
-        touched_end_once=true;
-        touched_once_border=true;
+        touched_end_once = true;
+        touched_once_border = true;
         no_hoverover_bound1 = true;
     }
-
-
 }
 
 function eltClicked(val_id) {
     if (val_id == "start") {
         touched_once_border = false;
-        touched_end_once=false;
-        no_hoverover_bound1=false;
+        touched_end_once = false;
+        no_hoverover_bound1 = false;
         boundColor("#eeeeee");
-        var h2_tag = (document.getElementById("status").innerHTML = "Another round. Current score: " + score);
-
+        var h2_tag = (document.getElementById("status").innerHTML =
+            "Another round. Current score: " + score);
     }
 }
 
@@ -78,30 +89,19 @@ function main() {
         var event_clicked_id = event_occuring.target.id;
         console.log(event_clicked_id);
         eltClicked(event_clicked_id);
-
-        // window.addEventListener("mousemove", function (event_occuring1) {
-        //     var event_property1 = event_occuring.target;
-        //     // var event_class = event_occuring.target.classList.value;
-        //     // var event_id = event_occuring.target.id;
-    
-        //     console.log(event_property1);
-    
-        //     checkOutside(event_property1);
-        //     // console.log(event_id);
-        // });
-
     });
 
     window.addEventListener("mousemove", function (event_occuring) {
         var event_property = event_occuring.target;
-        // var event_class = event_occuring.target.classList.value;
-        // var event_id = event_occuring.target.id;
-
         console.log(event_property);
 
         collisionCheck(event_property);
-        // console.log(event_id);
     });
 }
 
-window.onload = main();
+// window.onload = main();
+
+window.onload = function () {
+    textDesc();
+    main();
+};
